@@ -25,3 +25,9 @@ $ deactivate
 ```bash
 $ pip list
 ```
+
+## export the current environment settings file
+
+```bash
+$ pip freeze > requirements.txt
+```
