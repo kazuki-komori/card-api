@@ -26,7 +26,7 @@ $ deactivate
 $ pip list
 ```
 
-## export the current environment settings file
+## export the current environment settings file(パッケージをインストールしたら必ずこれする)
 
 ```bash
 $ pip freeze > requirements.txt
