@@ -1,25 +1,30 @@
 from src.colorPicker import ColorPicker
+import os
 import cv2
 from flask import Flask, request
+from flask_cors import CORS, cross_origin
 import base64
 import io
 from PIL import Image
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 app.debug = True
 
 
 @app.route('/send', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def send():
     if request.method == 'POST':
-        image = request.data
-        image = Image.open(io.BytesIO(image))
-        # データを一時保存
-        image.save('./data/data.jpg')
-        # 配列で色を返す
-        img = cv2.imread('./data/data.jpg')
-        res = ColorPicker(img).main()
-        return {"colors": res}
+        data_path = './data/data.jpg'
+        base64_img = request.json["image"]
+        img = base64.b64decode(str(base64_img))
+        jpg = Image.open(io.BytesIO(img))
+        jpg.save(data_path)
+        result_img = cv2.imread(data_path)
+        res = ColorPicker(result_img).main()
+        os.remove(data_path)
+        return { "colors": res }
 
 
 if __name__ == '__main__':
